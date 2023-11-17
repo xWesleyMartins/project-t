@@ -1,4 +1,6 @@
+import { Category } from 'src/Category/category.entity';
+
 export class ProductCreateDto {
   product_name: string;
-  product_category: string;
+  Category: Category;
 }

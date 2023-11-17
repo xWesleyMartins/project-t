@@ -1,5 +1,5 @@
 import { Injectable, Inject } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { DeleteResult, Repository } from 'typeorm';
 import { Product } from './product.entity';
 import { ProductCreateDto } from './dto/product.create.dto';
 import { ProductUpdateDto } from './dto/product.update.dto';
@@ -20,14 +20,23 @@ export class ProductService {
   }
 
   async findAll(): Promise<Product[]> {
-    const findAll = await this.productRepository.find();
+    const findAll = await this.productRepository.find({
+      relations: {
+        category: true,
+      },
+      select: {
+        category: {
+          category_name: true,
+        },
+      },
+    });
     return findAll;
   }
 
   async create(data: ProductCreateDto): Promise<resultDto> {
     const product = new Product();
     product.product_name = data.product_name;
-    product.product_category = data.product_category;
+    product.category = data.Category;
     return this.productRepository
       .save(product)
       .then(() => {
@@ -64,7 +73,7 @@ export class ProductService {
       });
   }
 
-  async delete(id: number): Promise<void> {
-    await this.productRepository.delete(id);
+  async delete(id: number): Promise<DeleteResult> {
+    return await this.productRepository.delete(id);
   }
 }

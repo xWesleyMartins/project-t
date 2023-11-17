@@ -13,18 +13,17 @@ import { resultDto } from './dto/result.dto';
 import { ProductCreateDto } from './dto/product.create.dto';
 import { ProductUpdateDto } from './dto/product.update.dto';
 
-@Controller('product')
+@Controller('/product')
 export class ProductController {
   constructor(private productService: ProductService) {}
 
-  @Get('/:id')
+  @Get('/findbyid/:id')
   public async findOne(@Param('id') product_id: number): Promise<Product> {
-    const findID = await this.productService.findOne(product_id);
-    console.log('CONTROLLER =>', findID);
-    return findID;
+    const findId = await this.productService.findOne(product_id);
+    return findId;
   }
 
-  @Get()
+  @Get('/findall')
   public async findAll(): Promise<Product[] | null> {
     return await this.productService.findAll();
   }
@@ -34,7 +33,7 @@ export class ProductController {
     return this.productService.create(data);
   }
 
-  @Patch('/:id')
+  @Patch('/update/:id')
   async update(
     @Param('id') id: number,
     @Body() productUpdateDto: ProductUpdateDto,
@@ -42,7 +41,7 @@ export class ProductController {
     return this.productService.update(id, productUpdateDto);
   }
 
-  @Delete('/:id')
+  @Delete('/delete/:id')
   async delete(@Param('id') id: number) {
     return this.productService.delete(id);
   }
