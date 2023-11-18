@@ -1,4 +1,5 @@
 import { Category } from 'src/Category/category.entity';
+import { Stock } from 'src/Stock/stock.entity';
 import {
   Entity,
   Column,
@@ -12,10 +13,7 @@ import {
 export class Product {
   @PrimaryGeneratedColumn()
   product_id: number;
-  @Column({
-    length: 500,
-    unique: true,
-  })
+  @Column({ length: 500, unique: true })
   product_name: string;
 
   @CreateDateColumn()
@@ -26,4 +24,7 @@ export class Product {
 
   @ManyToOne(() => Category, (category) => category.product)
   category: Category;
+
+  @ManyToOne(() => Stock, (stock) => stock.product)
+  stock: Stock;
 }

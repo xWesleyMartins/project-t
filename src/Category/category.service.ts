@@ -26,7 +26,6 @@ export class CategoryService {
   async create(data: CategoryCreateDto): Promise<resultDto> {
     const category = new Category();
     category.category_name = data.category_name;
-    // category.category_category = data.category_category;
     return this.categoryRepository
       .save(category)
       .then(() => {

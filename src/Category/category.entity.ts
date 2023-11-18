@@ -13,14 +13,8 @@ export class Category {
   @PrimaryGeneratedColumn()
   category_id: number;
   // id: number;
-  @Column({
-    length: 500,
-    unique: true,
-  })
+  @Column({ length: 500, unique: true })
   category_name: string;
-
-  // @Column({ length: 500 })
-  // category_category: string;
 
   @CreateDateColumn()
   created_date: Date;
