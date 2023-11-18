@@ -1,9 +1,8 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { Category } from './category.entity';
-import { CategoryCreateDto } from './dto/category.create.dto';
-import { CategoryUpdateDto } from './dto/category.update.dto';
-import { resultDto } from './dto/result.dto';
+import { CategoryCreateDto, CategoryUpdateDto } from '../Dto/Category.Dto';
+import { resultDto } from '../Dto/result.dto';
 
 @Injectable()
 export class CategoryService {
