@@ -4,21 +4,23 @@ import {
   Delete,
   Get,
   Param,
-  Patch,
+  // Patch,
   Post,
 } from '@nestjs/common';
 import { StockService } from './stock.service';
 import { Stock } from './stock.entity';
 import { resultDto } from '../Dto/result.dto';
-import { StockCreateDto, StockUpdateDto } from '../Dto/Stock.Dto';
+import { StockCreateDto } from '../Dto/Stock.Dto';
 
 @Controller('/stock')
 export class StockController {
   constructor(private stockService: StockService) {}
 
-  @Get('/findbyid/:id')
-  public async findOne(@Param('id') stock_id: number): Promise<Stock> {
-    const findId = await this.stockService.findOne(stock_id);
+  @Get('/findCurrentByProduct/:id')
+  public async findCurrentByProduct(
+    @Param('id') productId: number,
+  ): Promise<Stock> {
+    const findId = await this.stockService.findCurrentByProduct(productId);
     return findId;
   }
 
@@ -30,14 +32,6 @@ export class StockController {
   @Post('/create')
   async create(@Body() data: StockCreateDto): Promise<resultDto> {
     return this.stockService.create(data);
-  }
-
-  @Patch('/update/:id')
-  async update(
-    @Param('id') id: number,
-    @Body() stockUpdateDto: StockUpdateDto,
-  ): Promise<resultDto> {
-    return this.stockService.update(id, stockUpdateDto);
   }
 
   @Delete('/delete/:id')

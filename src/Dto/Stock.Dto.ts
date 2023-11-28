@@ -1,5 +1,8 @@
+import { Product } from 'src/Product/product.entity';
+
 export class StockCreateDto {
-  stock_name: string;
+  product: Product;
+  amount: number;
 }
 
 export class StockUpdateDto extends StockCreateDto {}

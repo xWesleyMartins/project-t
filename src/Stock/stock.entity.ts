@@ -1,3 +1,4 @@
+// import { Product } from 'src/Product/product.entity';
 import { Product } from 'src/Product/product.entity';
 import {
   Entity,
@@ -5,7 +6,9 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
-  OneToMany,
+  // OneToMany,
+  // ManyToMany,
+  ManyToOne,
 } from 'typeorm';
 
 @Entity()
@@ -13,11 +16,8 @@ export class Stock {
   @PrimaryGeneratedColumn()
   stock_id: number;
 
-  @Column({ unique: true, length: 500 })
-  stock_name: string;
-
-  // @Column()        //ainda nao sei como aplicar aplicar a forma de preenchimento dessa coluna  =/
-  // amount: number; // Talvez quando tabela Vendas estiver sendo feita fique mais claro pra mim =')
+  @Column()
+  amount: number; // quantidade
 
   @CreateDateColumn()
   created_date: Date;
@@ -25,6 +25,6 @@ export class Stock {
   @UpdateDateColumn() // data da ultima movimentação, talvez?
   updated_date: Date;
 
-  @OneToMany(() => Product, (product) => product.stock)
-  product: Product[];
+  @ManyToOne(() => Product, (product) => product.stock)
+  product: Product;
 }

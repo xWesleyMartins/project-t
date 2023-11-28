@@ -1,4 +1,5 @@
 import { Category } from 'src/Category/category.entity';
+// import { Sale } from 'src/Sale/sale.entity';
 import { Stock } from 'src/Stock/stock.entity';
 import {
   Entity,
@@ -7,14 +8,20 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
+  OneToMany,
 } from 'typeorm';
+import * as currency from 'currency.js';
 
 @Entity()
 export class Product {
   @PrimaryGeneratedColumn()
   product_id: number;
+
   @Column({ length: 500, unique: true })
   product_name: string;
+
+  @Column({ type: 'decimal' })
+  price: currency;
 
   @CreateDateColumn()
   created_date: Date;
@@ -25,6 +32,6 @@ export class Product {
   @ManyToOne(() => Category, (category) => category.product)
   category: Category;
 
-  @ManyToOne(() => Stock, (stock) => stock.product)
-  stock: Stock;
+  @OneToMany(() => Stock, (stock) => stock.product)
+  stock: Stock[];
 }

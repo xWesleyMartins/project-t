@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { DeleteResult, Repository } from 'typeorm';
 import { Stock } from './stock.entity';
-import { StockCreateDto, StockUpdateDto } from '../Dto/Stock.Dto';
+import { StockCreateDto } from '../Dto/Stock.Dto';
 import { resultDto } from '../Dto/result.dto';
 
 @Injectable()
@@ -11,23 +11,32 @@ export class StockService {
     private stockRepository: Repository<Stock>,
   ) {}
 
-  async findOne(stock_id: number): Promise<Stock> {
-    const findstock = await this.stockRepository.findOneBy({
-      stock_id,
+  async findCurrentByProduct(product_id: number): Promise<Stock> {
+    const findProductInStock = await this.stockRepository.findOne({
+      where: [{ product: { product_id } }],
+      order: { created_date: 'DESC' },
     });
-    return findstock;
+    return findProductInStock;
   }
 
   async findAll(): Promise<Stock[]> {
-    const findAll = await this.stockRepository.find();
+    const findAll = await this.stockRepository.find({
+      relations: {
+        product: true,
+      },
+      select: {
+        product: {
+          product_id: true,
+          product_name: true,
+        },
+      },
+    });
     return findAll;
   }
 
   async create(data: StockCreateDto): Promise<resultDto> {
-    const stock = new Stock();
-    stock.stock_name = data.stock_name;
     return this.stockRepository
-      .save(stock)
+      .save(data)
       .then(() => {
         return <resultDto>{
           status: true,
@@ -38,23 +47,6 @@ export class StockService {
         return <resultDto>{
           status: false,
           message: 'stock already exists!',
-        };
-      });
-  }
-
-  async update(id: number, stockUpdateDto: StockUpdateDto): Promise<resultDto> {
-    return this.stockRepository
-      .update(id, stockUpdateDto)
-      .then(() => {
-        return <resultDto>{
-          status: true,
-          message: 'SUCCESS!',
-        };
-      })
-      .catch(() => {
-        return <resultDto>{
-          status: false,
-          message: 'FAIL',
         };
       });
   }

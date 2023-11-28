@@ -12,7 +12,7 @@ import {
 export class Category {
   @PrimaryGeneratedColumn()
   category_id: number;
-  // id: number;
+
   @Column({ length: 500, unique: true })
   category_name: string;
 
