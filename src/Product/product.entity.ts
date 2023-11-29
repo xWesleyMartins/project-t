@@ -11,6 +11,7 @@ import {
   OneToMany,
 } from 'typeorm';
 import * as currency from 'currency.js';
+import { ItemSale } from 'src/Item_Sale/itemsale.entity';
 
 @Entity()
 export class Product {
@@ -34,4 +35,7 @@ export class Product {
 
   @OneToMany(() => Stock, (stock) => stock.product)
   stock: Stock[];
+
+  @OneToMany(() => ItemSale, (itemSale) => itemSale.product)
+  itemSale: ItemSale[];
 }

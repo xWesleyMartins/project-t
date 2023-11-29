@@ -19,24 +19,26 @@ export class SaleService {
   }
 
   async findAll(): Promise<Sale[]> {
-    return await this.saleRepository.find();
+    return await this.saleRepository.find({
+      relations: ['itemSale'],
+    });
   }
 
   async registerSale(data: SaleCreateDto): Promise<resultDto> {
-    return await this.saleRepository
-      .save(data)
-      .then(() => {
-        return <resultDto>{
-          status: true,
-          message: 'Sucessfully registered Sale!',
-        };
-      })
-      .catch(() => {
-        return <resultDto>{
-          status: false,
-          message: 'Sale not registered!',
-        };
-      });
+    try {
+      const sale = this.saleRepository.create(data);
+      await this.saleRepository.save(sale);
+      return <resultDto>{
+        status: true,
+        message: 'SUCCESS!',
+        data: sale,
+      };
+    } catch (error) {
+      return <resultDto>{
+        status: false,
+        message: error,
+      };
+    }
   }
 
   async update(id: number, saleUpdateDto: SaleUpdateDto): Promise<resultDto> {
