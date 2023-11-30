@@ -22,6 +22,12 @@ export class SaleController {
     return findId;
   }
 
+  // @Get('/findOneSaleid/:id')
+  // public async findOneSaleid(@Param('id') sale_id: number): Promise<Sale[]> {
+  //   const findId = await this.saleService.findItemsBySaleId(sale_id);
+  //   return findId;
+  // }
+
   @Get('/findall')
   public async findAll(): Promise<Sale[] | null> {
     return await this.saleService.findAll();

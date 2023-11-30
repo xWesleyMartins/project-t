@@ -1,4 +1,5 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import {
   // DeleteResult,
   Repository,
@@ -10,7 +11,7 @@ import { ItemSale } from './itemsale.entity';
 @Injectable()
 export class ItemSaleService {
   constructor(
-    @Inject('ITEM_SALE_REPOSITORY')
+    @InjectRepository(ItemSale)
     private itemSaleRepository: Repository<ItemSale>,
   ) {}
 
@@ -22,22 +23,27 @@ export class ItemSaleService {
     return await this.itemSaleRepository.findOneBy({ id });
   }
 
-  //   async registerSale(data: SaleCreateDto): Promise<resultDto> {
-  //     return await this.saleRepository
-  //       .save(data)
-  //       .then(() => {
-  //         return <resultDto>{
-  //           status: true,
-  //           message: 'Sucessfully registered Sale!',
-  //         };
-  //       })
-  //       .catch(() => {
-  //         return <resultDto>{
-  //           status: false,
-  //           message: 'Sale not registered!',
-  //         };
-  //       });
-  //   }
+  // async findItemsBySaleId(): Promise<ItemSale[]> {
+  //   const sale = await this.itemSaleRepository.find({
+  //     relations: {
+  //       product: true,
+  //       sale: true,
+  //     },
+  //     select: {
+  //       product: {
+  //         product_name: true,
+  //       },
+  //     },
+  //     // select: {
+  //     //   itemSale: {
+  //     //     relations: {
+  //     //       product: true,
+  //     //     },
+  //     //   },
+  //     // },
+  //   });
+  //   return sale;
+  // }
 
   //   async update(id: number, saleUpdateDto: SaleUpdateDto): Promise<resultDto> {
   //     return this.saleRepository

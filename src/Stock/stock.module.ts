@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
-import { DatabaseModule } from '../Database/database.module';
-import { stockProviders } from './stock.providers';
 import { StockService } from './stock.service';
 import { StockController } from './stock.controller';
+import { Stock } from './stock.entity';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
-  imports: [DatabaseModule],
+  imports: [TypeOrmModule.forFeature([Stock])],
   controllers: [StockController],
-  providers: [...stockProviders, StockService],
+  providers: [StockService],
 })
 export class StockModule {}

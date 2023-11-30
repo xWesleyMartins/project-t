@@ -1,13 +1,14 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { DeleteResult, Repository } from 'typeorm';
 import { Product } from './product.entity';
 import { ProductCreateDto, ProductUpdateDto } from '../Dto/Product.Dto';
 import { resultDto } from '../Dto/result.dto';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class ProductService {
   constructor(
-    @Inject('PRODUCT_REPOSITORY')
+    @InjectRepository(Product)
     private productRepository: Repository<Product>,
   ) {}
 

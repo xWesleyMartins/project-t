@@ -1,14 +1,19 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository } from 'typeorm';
 import { Sale } from './sale.entity';
 import { SaleCreateDto, SaleUpdateDto } from '../Dto/Sale.Dto';
 import { resultDto } from '../Dto/result.dto';
+import { Stock } from 'src/Stock/stock.entity';
+import { log } from 'console';
 
 @Injectable()
 export class SaleService {
   constructor(
-    @Inject('SALE_REPOSITORY')
+    @InjectRepository(Sale)
     private saleRepository: Repository<Sale>,
+    @InjectRepository(Stock)
+    private stockRepository: Repository<Stock>,
   ) {}
 
   async findOneSale(sale_id: number): Promise<Sale> {
@@ -27,6 +32,17 @@ export class SaleService {
   async registerSale(data: SaleCreateDto): Promise<resultDto> {
     try {
       const sale = this.saleRepository.create(data);
+      const itemStock: Stock[] = [];
+      for (const item of sale.itemSale) {
+        const response = await this.stockRepository.findOneBy({
+          product: { product_id: item.product.product_id },
+        });
+        itemStock[item.product.product_id] = response;
+      }
+      await Promise.all(itemStock);
+
+      console.log(itemStock);
+
       await this.saleRepository.save(sale);
       return <resultDto>{
         status: true,

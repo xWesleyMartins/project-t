@@ -27,6 +27,12 @@ export class ItemSaleController {
     return findId;
   }
 
+  // @Get('/findItemsBySaleId/')
+  // public async findItemsBySaleId(): Promise<ItemSale[]> {
+  //   const findId = await this.itemSaleService.findItemsBySaleId();
+  //   return findId;
+  // }
+
   // @Post('/registersale')
   // async registerSale(@Body() data: SaleCreateDto): Promise<resultDto> {
   //   return this.saleItemService.registerSale(data);
