@@ -35,7 +35,8 @@ export class ProductService {
   async create(data: ProductCreateDto): Promise<resultDto> {
     const product = new Product();
     product.product_name = data.product_name;
-    product.category = data.Category;
+    product.price = data.price;
+    product.category = data.category;
     return this.productRepository
       .save(product)
       .then(() => {

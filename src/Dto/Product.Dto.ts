@@ -4,7 +4,7 @@ import { Category } from 'src/Category/category.entity';
 export class ProductCreateDto {
   product_name: string;
   price: currency;
-  Category: Category;
+  category: Category;
 }
 
 export class ProductUpdateDto extends ProductCreateDto {}

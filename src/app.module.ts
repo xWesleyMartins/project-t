@@ -5,10 +5,16 @@ import { ProductModule } from './Product/product.module';
 import { CategoryModule } from './Category/category.module';
 import { StockModule } from './Stock/stock.module';
 import { SaleModule } from './Sale/sale.module';
-import { ItemSale } from './Item_Sale/itemsale.entity';
+import { ItemSaleModule } from './Item_Sale/itemsale.module';
 
 @Module({
-  imports: [ProductModule, CategoryModule, StockModule, SaleModule, ItemSale],
+  imports: [
+    ProductModule,
+    CategoryModule,
+    StockModule,
+    SaleModule,
+    ItemSaleModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

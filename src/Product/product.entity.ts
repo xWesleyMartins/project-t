@@ -9,6 +9,7 @@ import {
   UpdateDateColumn,
   ManyToOne,
   OneToMany,
+  JoinColumn,
 } from 'typeorm';
 import * as currency from 'currency.js';
 import { ItemSale } from 'src/Item_Sale/itemsale.entity';
@@ -21,7 +22,7 @@ export class Product {
   @Column({ length: 500, unique: true })
   product_name: string;
 
-  @Column({ type: 'decimal' })
+  @Column({ type: 'decimal', precision: 12, scale: 2 })
   price: currency;
 
   @CreateDateColumn()
@@ -31,6 +32,7 @@ export class Product {
   updated_date: Date;
 
   @ManyToOne(() => Category, (category) => category.product)
+  @JoinColumn({ name: 'category_id' })
   category: Category;
 
   @OneToMany(() => Stock, (stock) => stock.product)

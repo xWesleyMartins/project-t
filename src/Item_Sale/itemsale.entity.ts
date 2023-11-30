@@ -8,7 +8,6 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
-  JoinColumn,
 } from 'typeorm';
 
 @Entity()
@@ -17,7 +16,7 @@ export class ItemSale {
   id: number;
 
   @Column('integer')
-  sold_amount: number;
+  sold_amount: number; // quantidade vendida
 
   @Column('decimal', {
     precision: 12,
@@ -26,10 +25,15 @@ export class ItemSale {
   })
   unit_price: currency;
 
-  @ManyToOne(() => Product, (product) => product.itemSale)
+  @ManyToOne(() => Product, (product) => product.itemSale, {
+    eager: true,
+  })
   product: Product;
 
-  @ManyToOne(() => Sale, (sale) => sale.itemSale, { onDelete: 'CASCADE' })
+  @ManyToOne(() => Sale, (sale) => sale.itemSale, {
+    onDelete: 'CASCADE',
+    eager: true,
+  })
   sale: Sale;
 
   @CreateDateColumn()

@@ -24,14 +24,13 @@ export class Sale {
   sale_status: string;
 
   @CreateDateColumn()
-  created_date: Date;
+  created_date: Date; // data da venda
 
   @UpdateDateColumn()
   updated_date: Date;
 
-  @OneToMany(() => ItemSale, (itemSale) => itemSale.product, {
+  @OneToMany(() => ItemSale, (itemSale) => itemSale.sale, {
     cascade: true,
-    eager: true,
   })
   itemSale: ItemSale[];
 }

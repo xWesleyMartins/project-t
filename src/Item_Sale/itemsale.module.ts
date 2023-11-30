@@ -9,4 +9,4 @@ import { ItemSaleController } from './itemsale.controller';
   controllers: [ItemSaleController],
   providers: [...ItemSaleProviders, ItemSaleService],
 })
-export class SaleModule {}
+export class ItemSaleModule {}
