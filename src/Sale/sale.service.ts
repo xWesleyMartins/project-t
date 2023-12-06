@@ -5,8 +5,6 @@ import { Sale } from './sale.entity';
 import { SaleCreateDto, SaleUpdateDto } from '../Dto/Sale.Dto';
 import { resultDto } from '../Dto/result.dto';
 import { Stock } from 'src/Stock/stock.entity';
-import { log } from 'console';
-
 @Injectable()
 export class SaleService {
   constructor(
@@ -32,21 +30,24 @@ export class SaleService {
   async registerSale(data: SaleCreateDto): Promise<resultDto> {
     try {
       const sale = this.saleRepository.create(data);
-      const itemStock: Stock[] = [];
       for (const item of sale.itemSale) {
         const response = await this.stockRepository.findOneBy({
           product: { product_id: item.product.product_id },
         });
-        itemStock[item.product.product_id] = response;
+        if (response && response.amount >= item.sold_amount) {
+          response.amount -= item.sold_amount;
+          await this.stockRepository.save(response);
+        } else {
+          return <resultDto>{
+            status: false,
+            message: 'Insufficient stock for sale.',
+          };
+        }
       }
-      await Promise.all(itemStock);
-
-      console.log(itemStock);
-
       await this.saleRepository.save(sale);
       return <resultDto>{
         status: true,
-        message: 'SUCCESS!',
+        message: 'SALE MADE SUCCESSFULLY!',
         data: sale,
       };
     } catch (error) {
