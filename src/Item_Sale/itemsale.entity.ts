@@ -13,7 +13,7 @@ import {
 @Entity()
 export class ItemSale {
   @PrimaryGeneratedColumn()
-  id: number;
+  itemSale_id: number;
 
   @Column('integer')
   sold_amount: number; // quantidade vendida
