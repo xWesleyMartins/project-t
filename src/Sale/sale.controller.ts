@@ -11,6 +11,7 @@ import { SaleService } from './sale.service';
 import { Sale } from './sale.entity';
 import { resultDto } from '../Dto/result.dto';
 import { SaleCreateDto, SaleUpdateDto } from '../Dto/Sale.Dto';
+import { ItemSale } from 'src/Item_Sale/itemsale.entity';
 
 @Controller('/sale')
 export class SaleController {
@@ -22,11 +23,13 @@ export class SaleController {
     return findId;
   }
 
-  // @Get('/findOneSaleid/:id')
-  // public async findOneSaleid(@Param('id') sale_id: number): Promise<Sale[]> {
-  //   const findId = await this.saleService.findItemsBySaleId(sale_id);
-  //   return findId;
-  // }
+  @Get('/findSalesByProductId/:id')
+  public async findItemSalesByProductId(
+    @Param('id') product_id: number,
+  ): Promise<ItemSale[]> {
+    const findId = await this.saleService.findSalesByProductId(product_id);
+    return findId;
+  }
 
   @Get('/findall')
   public async findAll(): Promise<Sale[] | null> {

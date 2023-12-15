@@ -5,11 +5,14 @@ import { Sale } from './sale.entity';
 import { SaleCreateDto, SaleUpdateDto } from '../Dto/Sale.Dto';
 import { resultDto } from '../Dto/result.dto';
 import { Stock } from 'src/Stock/stock.entity';
+import { ItemSale } from 'src/Item_Sale/itemsale.entity';
 @Injectable()
 export class SaleService {
   constructor(
     @InjectRepository(Sale)
     private saleRepository: Repository<Sale>,
+    @InjectRepository(ItemSale)
+    private itemSaleRepository: Repository<ItemSale>,
     @InjectRepository(Stock)
     private stockRepository: Repository<Stock>,
   ) {}
@@ -27,22 +30,52 @@ export class SaleService {
     });
   }
 
+  async findSalesByProductId(product_id: number): Promise<ItemSale[]> {
+    const findByProduct = await this.itemSaleRepository.find({
+      where: { product: { product_id: product_id } },
+    });
+
+    return findByProduct;
+  }
+
   async registerSale(data: SaleCreateDto): Promise<resultDto> {
     try {
       const sale = this.saleRepository.create(data);
+      const noItemsInStock = [];
       for (const item of sale.itemSale) {
         const response = await this.stockRepository.findOneBy({
           product: { product_id: item.product.product_id },
         });
-        if (response && response.amount >= item.sold_amount) {
+        if (!response) {
+          throw new Error(
+            `product_id: "${item.product.product_id}" not found in stock`,
+          );
+        }
+        if (response.amount >= item.sold_amount) {
           response.amount -= item.sold_amount;
           await this.stockRepository.save(response);
         } else {
-          return <resultDto>{
-            status: false,
-            message: 'Insufficient stock for sale.',
-          };
+          // const totalPrice = (
+          //   Number(item.sold_amount) * Number(item.unit_price)
+          // ).toFixed(2);
+          noItemsInStock.push({
+            product: {
+              product_id: item.product.product_id,
+              quantity_demanded: item.sold_amount,
+              quantity_in_stock: response.amount,
+              difference: item.sold_amount - response.amount,
+              // total_price: totalPrice,
+            },
+          });
+          console.log(noItemsInStock);
         }
+      }
+      if (noItemsInStock.length > 0) {
+        return <resultDto>{
+          status: false,
+          message: 'product out of stock',
+          data: noItemsInStock,
+        };
       }
       await this.saleRepository.save(sale);
       return <resultDto>{
